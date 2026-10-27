@@ -1,0 +1,135 @@
+{
+  "provenance": {
+    "notice": "Recreated implementation, not the original repository. Synthetic data only.",
+    "paper": "https://arxiv.org/abs/2204.01494",
+    "seed": 7,
+    "python": "3.9.23",
+    "numpy": "2.0.2",
+    "scipy": "1.13.1",
+    "evaluation": "Independent noisy open-loop training; held-out receding-horizon car simulation. Forecast windows overlap.",
+    "constraint_calibration": "600 independent idealized acceleration samples, with noise and six injected outliers.",
+    "solver": "SciPy SLSQP + nested nonlinear least squares",
+    "wall_seconds": 8.899611050030217
+  },
+  "metrics": {
+    "learned": {
+      "ade_m": 0.5626765807625963,
+      "fde_m": 2.1954415168125205,
+      "speed_rmse_mps": 0.6607578656128191
+    },
+    "default": {
+      "ade_m": 1.1805806344530516,
+      "fde_m": 3.305679920694196,
+      "speed_rmse_mps": 0.8606251242656189
+    },
+    "constant_velocity": {
+      "ade_m": 3.021318953397241,
+      "fde_m": 7.207236717206882,
+      "speed_rmse_mps": 1.622097521889204
+    }
+  },
+  "profiles": [
+    {
+      "id": "smooth",
+      "true_weights": {
+        "acceleration": 0.32,
+        "jerk": 0.65
+      },
+      "learned_weights": {
+        "acceleration": 0.3169111693571681,
+        "jerk": 0.6606048268478093
+      },
+      "matched_horizon": {
+        "ade_m": 0.003606055492520925,
+        "fde_m": 0.016205998169163238,
+        "speed_rmse_mps": 0.006261752282417025
+      },
+      "metrics": {
+        "learned": {
+          "ade_m": 0.3352253080149147,
+          "fde_m": 1.3314040372059217,
+          "speed_rmse_mps": 0.4115058916018441
+        },
+        "default": {
+          "ade_m": 0.5444509156041574,
+          "fde_m": 2.118649362012815,
+          "speed_rmse_mps": 0.5678117078813945
+        },
+        "constant_velocity": {
+          "ade_m": 2.1678263275423832,
+          "fde_m": 5.860768072233076,
+          "speed_rmse_mps": 1.2260727085779972
+        }
+      },
+      "solve_ms_median": 7.743047026451677
+    },
+    {
+      "id": "balanced",
+      "true_weights": {
+        "acceleration": 0.12,
+        "jerk": 0.2
+      },
+      "learned_weights": {
+        "acceleration": 0.12371286384986639,
+        "jerk": 0.18417021311515253
+      },
+      "matched_horizon": {
+        "ade_m": 0.07081024663472262,
+        "fde_m": 0.03995431899292987,
+        "speed_rmse_mps": 0.04391826752336105
+      },
+      "metrics": {
+        "learned": {
+          "ade_m": 0.7891727987929638,
+          "fde_m": 2.755294209371121,
+          "speed_rmse_mps": 0.7611900890152075
+        },
+        "default": {
+          "ade_m": 0.4527777660706461,
+          "fde_m": 1.7011697007838682,
+          "speed_rmse_mps": 0.5544738315307981
+        },
+        "constant_velocity": {
+          "ade_m": 2.244920866472609,
+          "fde_m": 5.619670739907274,
+          "speed_rmse_mps": 1.2328698388016426
+        }
+      },
+      "solve_ms_median": 8.14914796501398
+    },
+    {
+      "id": "attack",
+      "true_weights": {
+        "acceleration": 0.035,
+        "jerk": 0.035
+      },
+      "learned_weights": {
+        "acceleration": 0.03148753668705663,
+        "jerk": 0.03400119195305083
+      },
+      "matched_horizon": {
+        "ade_m": 0.18769261069350676,
+        "fde_m": 0.20903937633720945,
+        "speed_rmse_mps": 0.10337891140189759
+      },
+      "metrics": {
+        "learned": {
+          "ade_m": 0.5636316354799105,
+          "fde_m": 2.4996263038605195,
+          "speed_rmse_mps": 0.8095776162214059
+        },
+        "default": {
+          "ade_m": 2.544513221684351,
+          "fde_m": 6.097220699285906,
+          "speed_rmse_mps": 1.4595898333846642
+        },
+        "constant_velocity": {
+          "ade_m": 4.65120966617673,
+          "fde_m": 10.141271339480298,
+          "speed_rmse_mps": 2.4073500182879726
+        }
+      },
+      "solve_ms_median": 20.47130500432104
+    }
+  ]
+}

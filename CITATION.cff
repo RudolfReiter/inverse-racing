@@ -1,0 +1,27 @@
+cff-version: 1.2.0
+message: "This is a recreated implementation, not the original repository. Please cite the original paper."
+title: "Inverse Racing: a recreated implementation"
+type: software
+version: 0.1.0
+license: MIT
+authors:
+  - family-names: Reiter
+    given-names: Rudolf
+preferred-citation:
+  type: conference-paper
+  title: "An Inverse Optimal Control Approach for Trajectory Prediction of Autonomous Race Cars"
+  authors:
+    - family-names: Reiter
+      given-names: Rudolf
+    - family-names: Messerer
+      given-names: Florian
+    - family-names: Schratter
+      given-names: Markus
+    - family-names: Watzenig
+      given-names: Daniel
+    - family-names: Diehl
+      given-names: Moritz
+  year: 2022
+  doi: 10.23919/ECC55457.2022.9838100
+  collection-title: "2022 European Control Conference (ECC)"
+  url: "https://arxiv.org/abs/2204.01494"
