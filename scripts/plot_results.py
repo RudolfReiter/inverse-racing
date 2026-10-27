@@ -15,7 +15,8 @@ colors = {"learned": "#ff8452", "actual": "#b4d8a4", "default": "#b5b3db", "cons
 plt.rcParams.update({"font.family": "DejaVu Sans", "font.size": 9, "figure.facecolor": "#151b14",
                      "axes.facecolor": "#151b14", "axes.edgecolor": "#405237", "axes.labelcolor": "#a4b897",
                      "text.color": "#e8ecdf", "xtick.color": "#9fb28f", "ytick.color": "#9fb28f",
-                     "grid.color": "#405237", "grid.alpha": .45, "svg.fonttype": "none"})
+                     "grid.color": "#405237", "grid.alpha": .45, "svg.fonttype": "none",
+                     "svg.hashsalt": "inverse-racing"})
 fig, axes = plt.subplots(2, 2, figsize=(13, 7.4), layout="constrained")
 fig.suptitle("INVERSE RACING  /  THE SYNTHETIC CAR EXPERIMENT", fontsize=15, x=.055, ha="left", fontweight="medium")
 ax = axes[0, 0]
@@ -67,6 +68,8 @@ for ax in axes.flat:
     ax.grid(axis="y", linewidth=.5)
     ax.set_axisbelow(True)
 fig.savefig(out / "evaluation.svg", metadata={"Date": None})
+svg = out / "evaluation.svg"
+svg.write_text("\n".join(line.rstrip() for line in svg.read_text().splitlines()) + "\n")
 fig.savefig(out / "evaluation.png", dpi=170)
 plt.close(fig)
 
