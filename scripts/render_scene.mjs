@@ -40,19 +40,24 @@ for(const key of ['fillStyle','strokeStyle','lineWidth','globalAlpha','font','te
 const experiment=JSON.parse(fs.readFileSync(path.join(root,'docs/data/experiment.json'),'utf8'));
 const noopObserver=class{observe(){}disconnect(){}};
 const sandbox={window:{devicePixelRatio:1},ResizeObserver:noopObserver,IntersectionObserver:noopObserver,Math};
-vm.runInNewContext(fs.readFileSync(path.join(root,'docs/scene.js'),'utf8'),sandbox);
+for(const file of ['replay.js','scene.js'])vm.runInNewContext(fs.readFileSync(path.join(root,'docs',file),'utf8'),sandbox);
 const out=path.resolve(process.argv[2]||path.join(root,'artifacts/scenes'));fs.mkdirSync(out,{recursive:true});
-const frames=process.argv.includes('--animate')?36:1;
+const animate=process.argv.includes('--animate');
+const frames=animate?61:1;
+const replay=new sandbox.window.ComparisonReplay(experiment.scenarios[1],experiment.config);
 for(let i=0;i<frames;i++){
   const context=new SVGContext(1000,600);
   const canvas={getContext:()=>context,getBoundingClientRect:()=>({width:1000,height:600}),addEventListener(){}};
   const scene=new sandbox.window.RacingScene(canvas,experiment);
-  scene.render(experiment.scenarios[1],frames>1?i*.5:5,6,true,true);
-  context.font='11px monospace';context.fillStyle='#dce5d1';context.fillText('INVERSE / RACING',28,30);
-  context.font='9px monospace';context.fillStyle='#a9bb9a';context.fillText('SYNTHETIC CAR EXPERIMENT · BALANCED DRIVER',28,49);
-  context.fillStyle='#ff9a67';context.fillText('ORANGE  PREDICTION',28,560);context.fillStyle='#b4d8a4';context.fillText('GREEN  ACTUAL FUTURE',28,578);
-  context.textAlign='right';context.fillStyle='#b0c09f';context.fillText(`T + ${(frames>1?i*.5:5).toFixed(1)} s`,973,30);
-  context.font='8px monospace';context.fillText('RECREATED IMPLEMENTATION · NOT THE ORIGINAL REPOSITORY',973,579);
+  replay.seek(animate?i*.1:6);
+  scene.render(replay.snapshot(),{showPath:true});
+  context.font='16px sans-serif';context.fillStyle='#202b38';context.fillText('Inverse Racing · ECC 2022 research recreation',28,30);
+  context.font='14px sans-serif';context.fillStyle='#526170';context.fillText('One fixed forecast · Actual car and ghost at the same elapsed time',28,55);
+  context.fillStyle='#2166ac';context.fillText('Blue: actual car',28,561);
+  context.fillStyle='#b44819';context.fillText('Orange: prediction ghost',28,585);
+  context.textAlign='right';context.fillStyle='#263c50';context.fillText(`Elapsed ${replay.elapsed.toFixed(1)} / 6.0 s`,973,30);
+  context.fillText(`Position error: ${replay.snapshot().error.toFixed(2)} m`,973,55);
+  context.font='14px sans-serif';context.fillText('Synthetic data · Recreated implementation',973,585);
   fs.writeFileSync(path.join(out,`frame-${String(i).padStart(3,'0')}.svg`),context.output());
 }
 console.log(`Exported ${frames} scene frame(s) to ${out}`);

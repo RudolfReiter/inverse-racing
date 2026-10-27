@@ -72,7 +72,7 @@ Forecast windows overlap and are correlated. The simulation, path, cost family, 
 
 `experiment.json` is the primary output. `experiment.js` contains the same JSON in a script assignment for direct `file://` use. The page interpolates recorded car motion; forecast lines, endpoint markers, charts, weights, and errors come from the Python outputs. It never adjusts the experiment to fit a visual claim.
 
-The scene renderer uses Canvas 2D with a three-dimensional projection. Track edges, reference positions, cars, curbs, garages, stands, and vegetation are code-generated. Car scale is deliberately enlarged; speed-pillar height is illustrative. The horizon buttons crop an existing six-second trajectory. They do not trigger fresh optimization.
+The scene renderer uses Canvas 2D with a three-dimensional projection. Track edges, reference positions, cars, curbs, garages, stands, and vegetation are code-generated. Car scale is deliberately enlarged; speed-pillar height is illustrative. The replay freezes one forecast at origins 0, 6, 12, and 18 seconds. Both cars advance to the same elapsed time within that window. Its final comparison holds for 1.4 seconds before the next forecast starts. The camera defaults to a fixed view, while follow mode interpolates continuous vehicle motion with exponential camera smoothing. The replay stops at the end; it never jumps automatically back to the start. The benchmark still evaluates all 57 overlapping forecasts. No browser control triggers fresh optimization.
 
 `scripts/render_scene.mjs` exports the same renderer’s drawing commands as SVG for standalone illustrations. This validates scene output, not HTML layout or browser interactions. Full browser verification requires a browser-capable environment.
 

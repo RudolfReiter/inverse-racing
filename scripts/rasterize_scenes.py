@@ -27,6 +27,6 @@ for source in sorted((ROOT / "artifacts/scenes").glob("frame-*.svg")):
 if not frames:
     raise SystemExit("No scene frames found. Run the SVG exporter first.")
 destination = ROOT / "docs/assets"
-frames[min(10, len(frames)-1)].save(destination / "driving-scene.png")
-frames[0].save(destination / "driving-preview.gif", save_all=True, append_images=frames[1:], duration=110, loop=0, optimize=False)
+frames[-1].save(destination / "driving-scene.png")
+frames[0].save(destination / "driving-preview.gif", save_all=True, append_images=frames[1:], duration=[100] * (len(frames)-1) + [1400], loop=0, optimize=False)
 print(f"Saved scene PNG and {len(frames)}-frame GIF")

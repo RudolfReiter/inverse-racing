@@ -11,11 +11,11 @@ ROOT = Path(__file__).resolve().parents[1]
 data = json.loads((ROOT / "docs/data/experiment.json").read_text())
 out = ROOT / "docs/assets"
 out.mkdir(parents=True, exist_ok=True)
-colors = {"learned": "#ff8452", "actual": "#b4d8a4", "default": "#b5b3db", "constant_velocity": "#7a8970"}
-plt.rcParams.update({"font.family": "DejaVu Sans", "font.size": 9, "figure.facecolor": "#151b14",
-                     "axes.facecolor": "#151b14", "axes.edgecolor": "#405237", "axes.labelcolor": "#a4b897",
-                     "text.color": "#e8ecdf", "xtick.color": "#9fb28f", "ytick.color": "#9fb28f",
-                     "grid.color": "#405237", "grid.alpha": .45, "svg.fonttype": "none",
+colors = {"learned": "#b44819", "actual": "#2166ac", "default": "#75559b", "constant_velocity": "#697682"}
+plt.rcParams.update({"font.family": "DejaVu Sans", "font.size": 9, "figure.facecolor": "#ffffff",
+                     "axes.facecolor": "#ffffff", "axes.edgecolor": "#dce2e7", "axes.labelcolor": "#526170",
+                     "text.color": "#202b38", "xtick.color": "#526170", "ytick.color": "#526170",
+                     "grid.color": "#dce2e7", "grid.alpha": .45, "svg.fonttype": "none",
                      "svg.hashsalt": "inverse-racing"})
 fig, axes = plt.subplots(2, 2, figsize=(13, 7.4), layout="constrained")
 fig.suptitle("INVERSE RACING  /  THE SYNTHETIC CAR EXPERIMENT", fontsize=15, x=.055, ha="left", fontweight="medium")
@@ -24,7 +24,7 @@ x = np.arange(3)
 for i, (key, label) in enumerate([("learned", "Learned"), ("default", "Default weights"), ("constant_velocity", "Constant velocity")]):
     y = [s["metrics"][key]["ade_m"] for s in data["scenarios"]]
     bars = ax.bar(x + (i - 1) * .23, y, .20, color=colors[key], label=label)
-    ax.bar_label(bars, fmt="%.2f", fontsize=7, padding=3, color="#d7e2cb")
+    ax.bar_label(bars, fmt="%.2f", fontsize=7, padding=3, color="#202b38")
 ax.set_xticks(x, ["Smooth", "Balanced", "Attack"])
 ax.set_ylabel("Mean position error · m")
 ax.set_title("57 held-out forecasts · lower is better", loc="left", pad=15)
@@ -44,8 +44,8 @@ ax.legend(frameon=False, fontsize=7)
 
 ax = axes[1, 0]
 samples = np.array(data["calibration"]["samples"])
-ax.scatter(samples[6:, 0], samples[6:, 1], s=5, color="#899e79", alpha=.5, label="Calibration samples")
-ax.scatter(samples[:6, 0], samples[:6, 1], s=14, color="#d6a07a", label="Injected outliers")
+ax.scatter(samples[6:, 0], samples[6:, 1], s=5, color="#697682", alpha=.5, label="Calibration samples")
+ax.scatter(samples[:6, 0], samples[:6, 1], s=14, color="#b44819", label="Injected outliers")
 for key, color, label in [("true_vertices", colors["actual"], "True envelope"), ("estimated_vertices", colors["learned"], "Estimated")]:
     p = np.array(data["calibration"][key]); p = np.vstack([p, p[0]])
     ax.plot(p[:, 0], p[:, 1], color=color, linewidth=1.5, linestyle="--" if key == "true_vertices" else "-", label=label)

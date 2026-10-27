@@ -34,11 +34,11 @@ Visit **http://localhost:8000**. The page is entirely static and requires no Nod
 
 - Three driver profiles: **Smooth**, **Balanced**, and **Attack**.
 - A projected 3D circuit, animated race cars, speed pillars, and future-position markers.
-- Follow, circuit, and top views; drag or arrow keys to orbit; a replay timeline and speed control.
+- Stationary, smoothly following, circuit, and top cameras; a replay timeline and speed control.
 - Synchronized speed and error plots, learned acceleration envelopes, weight estimates, and numerical comparisons.
 - JSON download and source package, with offline replay support and reduced-motion handling.
 
-The scene replays real outputs from this repository’s Python simulation. Switching horizons clips a precomputed six-second forecast; it does not solve a new optimization problem in the browser. Cars are enlarged for visibility. The green future is available because this is an offline evaluation, not a live sensor measurement.
+The scene replays real outputs from this repository’s Python simulation. Each forecast stays fixed for six seconds. The actual car and orange prediction ghost advance at the same elapsed time; the final error is held briefly before a new forecast begins. Playback starts paused and stops at the end of the drive. A distance ruler and synchronized chart cursors expose small errors. You can compare learned preferences, default weights, and constant velocity. Cars are enlarged for visibility. The blue car follows held-out simulated motion. This is an offline evaluation, not a live sensor feed.
 
 ## Run the car example
 

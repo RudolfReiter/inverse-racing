@@ -1,1 +1,1 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64"><rect width="64" height="64" rx="12" fill="#101211"/><g fill="#ff8452" transform="skewX(-18)"><path d="M25 16h7v32h-7z"/><path opacity=".7" d="M36 16h7v32h-7z"/><path opacity=".4" d="M47 16h7v32h-7z"/></g></svg>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64"><rect width="64" height="64" rx="10" fill="#2166ac"/><text x="32" y="43" text-anchor="middle" font-family="Arial,sans-serif" font-size="32" fill="#fff">IR</text></svg>

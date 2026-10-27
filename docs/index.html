@@ -3,108 +3,104 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="theme-color" content="#101211">
-  <meta name="description" content="Watch inverse optimal control learn how a race car drives. An interactive, reproducible recreation of the 2022 trajectory-prediction paper.">
-  <meta property="og:title" content="Inverse Racing — Racing intent, made visible.">
-  <meta property="og:description" content="An interactive recreation. Three driving styles. Real optimization outputs. Explore autonomous race-car trajectory prediction.">
+  <meta name="theme-color" content="#ffffff">
+  <meta name="description" content="An interactive recreation of the ECC 2022 paper on inverse optimal control for autonomous race-car trajectory prediction. Compare a fixed prediction with actual simulated motion.">
+  <meta property="og:title" content="Inverse Racing | ECC 2022 research recreation">
+  <meta property="og:description" content="Explore the research, compare predicted and actual car motion, and reproduce the synthetic experiments.">
   <meta property="og:type" content="website">
   <meta property="og:image" content="assets/social-card.svg">
   <link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
   <link rel="stylesheet" href="styles.css">
-  <title>Inverse Racing — Racing intent, made visible.</title>
+  <title>Inverse Racing | ECC 2022 research recreation</title>
   <script src="data/experiment.js" defer></script>
+  <script src="replay.js" defer></script>
   <script src="scene.js" defer></script>
   <script src="app.js" defer></script>
 </head>
 <body>
-  <a class="skip" href="#playground">Skip to interactive demo</a>
+  <a class="skip" href="#playground">Skip to simulation</a>
   <header class="header wrap">
-    <a class="wordmark" href="#" aria-label="Inverse Racing home"><span class="brand-icon"><i></i><i></i><i></i></span> INVERSE<span class="brand-light">RACING</span><sup>LAB</sup></a>
-    <nav aria-label="Main navigation"><a href="#playground">Playground</a><a href="#method">The method</a><a href="#results">Results</a><a class="nav-source" href="https://github.com/RudolfReiter" target="_blank" rel="noopener">RudolfReiter <span>↗</span></a></nav>
+    <a class="wordmark" href="#research">Inverse Racing <span>Research recreation</span></a>
+    <nav aria-label="Main navigation"><a href="#method">Method</a><a href="#playground">Simulation</a><a href="#results">Results</a><a href="https://github.com/RudolfReiter/inverse-racing" target="_blank" rel="noopener">GitHub ↗</a></nav>
   </header>
-
   <main>
-    <section class="hero wrap" aria-labelledby="hero-title">
-      <div class="hero-copy">
-        <div class="eyebrow"><span class="pulse"></span> INVERSE OPTIMAL CONTROL <span class="eyebrow-divider">/</span> ECC 2022 RECREATED</div>
-        <h1 id="hero-title">Racing intent,<br>made <em>visible.</em></h1>
-        <p class="hero-description">A few observations. A model of intent.<br>See how learning <em>why</em> a race car moves<br>helps predict where it goes next.</p>
-        <div class="hero-actions"><a class="button primary" href="#playground">Enter the playground <span>↗</span></a><a class="text-link" href="https://arxiv.org/abs/2204.01494" target="_blank" rel="noopener">Read the paper <span>↗</span></a></div>
-        <p class="hero-note">Recreated implementation · Synthetic race-car experiments</p>
-      </div>
-      <div class="hero-scene">
-        <canvas id="hero-canvas" role="img" aria-label="Animated isometric circuit showing a white race car, an orange predicted trajectory, and green ground truth."></canvas>
-        <div class="hero-scene-label"><span class="tiny-dot orange"></span> LOOKING SIX SECONDS AHEAD</div>
-        <div class="hero-coordinate">APEX CIRCUIT<br><span>1278 m · SYNTHETIC</span></div>
-        <div class="hero-compass"><span>N</span><i>↑</i></div>
-      </div>
-      <div class="hero-footer"><span>LEARN THE DRIVER. ANTICIPATE THE DRIVE.</span><span>SCROLL TO EXPLORE <b>↓</b></span></div>
+    <section id="research" class="hero wrap" aria-labelledby="paper-title">
+      <p class="publication-badge">Published at the European Control Conference · ECC 2022</p>
+      <h1 id="paper-title">An Inverse Optimal Control Approach for Trajectory Prediction of Autonomous Race Cars</h1>
+      <p class="authors"><a href="https://github.com/RudolfReiter">Rudolf Reiter</a>, Florian Messerer, Markus Schratter, Daniel Watzenig, and Moritz Diehl</p>
+      <p class="research-summary">The paper predicts a race car’s motion by learning the objective behind its driving behavior. It combines a constrained trajectory optimizer with inverse optimal control to estimate acceleration and jerk preferences from observed motion.</p>
+      <div class="hero-actions"><a class="button primary" href="https://arxiv.org/abs/2204.01494" target="_blank" rel="noopener">Read the paper ↗</a><a class="button secondary" href="#playground">Explore the simulation ↓</a><a class="text-link" href="https://doi.org/10.23919/ECC55457.2022.9838100" target="_blank" rel="noopener">Conference publication ↗</a></div>
+      <p class="recreation-banner"><strong>Recreated implementation, not the original repository.</strong> The interactive examples below use synthetic data and a simplified solver. They do not reproduce the paper’s recorded race-car experiments.</p>
     </section>
 
-    <section class="paper-strip"><div class="wrap"><span class="paper-index">THE RESEARCH <span>01 / 04</span></span><div><p>An Inverse Optimal Control Approach for<br class="desktop-break"> Trajectory Prediction of Autonomous Race Cars</p><span>R. Reiter · F. Messerer · M. Schratter · D. Watzenig · M. Diehl</span></div><a href="https://arxiv.org/abs/2204.01494" target="_blank" rel="noopener" aria-label="Open the original research paper">2022 <span>↗</span></a></div></section>
-
-    <section id="playground" class="section wrap">
-      <div class="section-heading"><div><div class="eyebrow">01 <span class="eyebrow-divider">/</span> THE DRIVING LAB</div><h2>Watch the next move.</h2></div><p>Choose a driver. Follow the car. Compare its future<br class="desktop-break"> motion with the prediction made a moment earlier.</p></div>
+    <section id="playground" class="section wrap" aria-labelledby="simulation-title">
+      <div class="section-heading"><h2 id="simulation-title">Compare predicted and actual car motion</h2><p>One forecast is fixed for six seconds. The blue car follows the actual simulation; the orange ghost follows that forecast at the <strong>same elapsed time</strong>. Their separation is the prediction error.</p></div>
+      <ol class="comparison-steps"><li><strong>Fix a prediction.</strong> Both cars start from the same observed state.</li><li><strong>Watch six seconds.</strong> The ghost keeps its original prediction as the real car moves.</li><li><strong>Inspect the error.</strong> The final comparison holds briefly, then a new forecast starts.</li></ol>
       <div class="lab">
-        <div class="lab-toolbar"><div class="driver-tabs" role="group" aria-label="Driving style"><button data-profile="smooth" aria-pressed="false">01 <span>Smooth</span></button><button data-profile="balanced" aria-pressed="true" class="active">02 <span>Balanced</span></button><button data-profile="attack" aria-pressed="false">03 <span>Attack</span></button></div><span class="replay-label"><span class="tiny-dot mint"></span> PYTHON OUTPUT REPLAY</span></div>
+        <div class="lab-toolbar"><div class="driver-tabs" role="group" aria-label="Simulated driver"><span>Driver</span><button data-profile="smooth" aria-pressed="false">Smooth</button><button data-profile="balanced" aria-pressed="true" class="active">Balanced</button><button data-profile="attack" aria-pressed="false">Aggressive</button></div><span class="replay-label">Synthetic car experiment</span></div>
         <div class="lab-body">
           <div class="scene-shell">
-            <canvas id="race-canvas" tabindex="0" role="img" aria-label="Interactive 3D-style driving scene. Drag to orbit, use arrow keys to rotate, or use the camera buttons. The white car is observed; orange marks its predicted future; green marks its actual future."></canvas>
-            <div class="scene-top"><div><span class="scene-kicker">APEX CIRCUIT / TURN SECTOR</span><div class="scene-speed"><span id="live-speed">—</span><small>km/h</small></div></div><span class="scene-time" id="scene-time">T + 00.0 s</span></div>
-            <div class="scene-legend"><span><i class="legend-line orange"></i> Prediction</span><span><i class="legend-line mint dashed"></i> Actual future</span><span><i class="tiny-dot white"></i> Observed car</span></div>
-            <div class="camera-tools" role="group" aria-label="Camera view"><button id="follow-camera" aria-pressed="true" title="Follow the race car">◎ Follow</button><button id="circuit-camera" aria-pressed="false" title="View the full circuit">⌗ Circuit</button><button id="top-camera" aria-pressed="false" title="View from above">↓ Top</button><button id="reset-camera" title="Reset camera" aria-label="Reset camera">↺</button></div>
-            <span class="scene-hint">DRAG TO ORBIT · CARS ENLARGED FOR CLARITY</span>
+            <canvas id="race-canvas" tabindex="0" role="img" aria-label="Actual car in blue and prediction ghost in orange at the same time. Each prediction is held fixed for six seconds. Use the camera buttons or arrow keys to change the view."></canvas>
+            <div class="scene-top"><span id="forecast-origin">Forecast made at 0.0 s</span><span id="scene-time">Elapsed 0.0 / 6.0 s</span></div>
+            <div class="scene-status" id="comparison-phase">Ready to compare</div>
+            <div class="scene-legend"><span><i class="tiny-dot actual"></i> Actual car</span><span><i class="legend-line predicted dashed"></i> Prediction ghost</span></div>
+            <div class="camera-tools" role="group" aria-label="Camera view"><button id="window-camera" aria-pressed="true">Fixed camera</button><button id="follow-camera" aria-pressed="false">Follow car</button><button id="circuit-camera" aria-pressed="false">Circuit</button><button id="top-camera" aria-pressed="false">Top view</button><button id="reset-camera" aria-label="Reset camera">↺</button></div>
           </div>
-          <aside class="telemetry" aria-label="Prediction telemetry">
-            <div class="telemetry-title"><span class="eyebrow">DRIVER PROFILE</span><span class="profile-index" id="profile-index">02</span></div>
-            <h3 id="profile-name">Balanced racer</h3><p id="profile-description">A little more intent. Progress and composure in equal measure.</p>
-            <div class="horizon-control"><label>Display horizon</label><div role="group" aria-label="Display prediction horizon"><button data-horizon="2" aria-pressed="false">2 s</button><button data-horizon="4" aria-pressed="false">4 s</button><button class="active" data-horizon="6" aria-pressed="true">6 s</button></div><small>Clips the existing 6 s forecast.</small></div>
-            <div class="metric-big"><span>THIS FORECAST · 6 s ADE</span><div><strong id="forecast-ade">—</strong><span>m</span></div><small>Mean position error vs. the actual future</small></div>
-            <div class="metric-pair"><div><span>LEARNED w<sub>a</sub></span><strong id="weight-a">—</strong></div><div><span>LEARNED w<sub>j</sub></span><strong id="weight-j">—</strong></div></div>
-            <label class="toggle-row"><span>Show actual future</span><input id="show-truth" type="checkbox" checked><span class="switch" aria-hidden="true"></span></label>
-            <label class="toggle-row"><span>Show speed pillars</span><input id="show-bars" type="checkbox" checked><span class="switch" aria-hidden="true"></span></label>
-            <div class="relaxation" id="relaxation">Hard acceleration bounds satisfied</div>
+          <aside class="telemetry" aria-label="Prediction comparison">
+            <h3 id="profile-name">Balanced driver</h3><p id="profile-description">Moderate acceleration and jerk penalties.</p>
+            <label class="field-label" for="prediction-model">Prediction method</label>
+            <select id="prediction-model"><option value="learned">Learned preferences</option><option value="default">Default weights</option><option value="constant_velocity">Constant velocity</option></select>
+            <div class="metric-big"><span>Position error now</span><div><strong id="current-error">0.00</strong><span>m</span></div><p>Distance between the two cars at the same time.</p></div>
+            <div class="gap-comparison"><span>Difference along the path</span><svg id="gap-chart" viewBox="0 0 270 108" role="img" aria-label="Ruler showing whether the predicted car is ahead of or behind the actual car"></svg><p id="gap-description">The two positions coincide.</p></div>
+            <dl class="forecast-metrics"><div><dt>Mean error over 6 s</dt><dd id="forecast-ade">—</dd></div><div><dt>Actual speed</dt><dd id="live-speed">—</dd></div></dl>
+            <label class="toggle-row"><input id="show-path" type="checkbox" checked><span>Show trajectory paths</span></label>
+            <label class="toggle-row"><input id="show-bars" type="checkbox"><span>Show predicted speed pillars</span></label>
+            <p class="relaxation" id="relaxation">Hard acceleration bounds satisfied.</p>
           </aside>
         </div>
-        <div class="playback"><button id="play-toggle" class="play-button" aria-label="Pause replay">Ⅱ</button><span id="play-time">00.0</span><label class="sr-only" for="timeline">Replay time in seconds</label><input id="timeline" type="range" min="0" max="18" step="0.2" value="0"><span id="play-duration">18.0 s</span><button id="replay-speed" aria-label="Change playback speed">1×</button></div>
+        <div class="playback"><button id="play-toggle" class="button primary" aria-label="Play comparison">Play</button><button id="restart-window" class="button secondary" aria-label="Replay the current six-second comparison">Replay window</button><button id="next-window" class="button secondary" aria-label="Go to the next six-second comparison">Next window</button><label for="timeline">Drive time</label><input id="timeline" type="range" min="0" max="24" step="0.05" value="0"><span id="play-time">0.0 / 24.0 s</span><button id="replay-speed" class="button secondary" aria-label="Change playback speed">1×</button></div>
       </div>
-      <div class="plot-grid"><article class="plot-card"><div class="plot-header"><div><span class="eyebrow">TELEMETRY / 01</span><h3>Speed through the corner</h3></div><span class="unit">m/s</span></div><svg id="speed-chart" viewBox="0 0 600 240" role="img" aria-label="Predicted, actual, default-weight, and constant-velocity speed over the six-second forecast"></svg><div class="chart-key"><span><i class="orange"></i>Learned</span><span><i class="mint"></i>Actual</span><span><i class="lavender"></i>Default weights</span><span><i class="muted-dot"></i>Constant velocity</span></div></article><article class="plot-card"><div class="plot-header"><div><span class="eyebrow">TELEMETRY / 02</span><h3>When predictions diverge</h3></div><span class="unit">m</span></div><svg id="error-chart" viewBox="0 0 600 240" role="img" aria-label="Euclidean position error over prediction time for the three methods"></svg><p class="chart-note">Same path, different timing. Small speed differences accumulate into position error.</p></article></div>
-      <p class="under-note">The opponent replans every 0.2 s. Orange predictions are computed offline and refreshed every 1 s in this replay. No optimization runs in your browser.</p>
+      <p class="under-note">The camera is stationary by default. Follow mode uses continuous motion and a fixed orientation. Cars are enlarged for visibility; the error ruler shows distance in meters. Playback stops at the end of the drive.</p>
+      <div class="plot-grid">
+        <article class="plot-card"><h3>Predicted and actual speed</h3><p>Vehicle speed over the fixed forecast. A close match means the predictor captures when the car accelerates or brakes.</p><svg id="speed-chart" viewBox="0 0 600 280" role="img" aria-label="Actual speed and the three predicted speed profiles versus seconds since the fixed forecast"></svg><div class="chart-key"><span><i class="actual"></i>Actual</span><span><i class="predicted"></i>Learned</span><span><i class="baseline"></i>Default weights</span><span><i class="constant"></i>Constant velocity</span></div></article>
+        <article class="plot-card"><h3>Position prediction error</h3><p>Distance from the actual car at each elapsed time. Zero is an exact prediction. The vertical cursor follows the cars in the scene.</p><svg id="error-chart" viewBox="0 0 600 280" role="img" aria-label="Euclidean position prediction error in meters versus seconds since the fixed forecast"></svg><div class="chart-key"><span><i class="predicted"></i>Learned</span><span><i class="baseline"></i>Default weights</span><span><i class="constant"></i>Constant velocity</span></div></article>
+      </div>
+      <p class="under-note">The plots and scene use the same fixed forecast. Its origin changes only after the six-second comparison. All trajectories were computed by the Python solver; the browser replays them.</p>
     </section>
 
-    <section id="method" class="method-section section"><div class="wrap">
-      <div class="section-heading"><div><div class="eyebrow">02 <span class="eyebrow-divider">/</span> UNDER THE HOOD</div><h2>Learn the objective.<br>Then look ahead.</h2></div><p>The driver’s motion carries clues about its priorities.<br class="desktop-break"> Inverse optimal control turns those clues into<br class="desktop-break"> interpretable acceleration and jerk penalties.</p></div>
-      <div class="method-flow"><article><span class="step-number">01 <i>↗</i></span><h3>Observe the motion.</h3><p>Collect short sequences of progress, speed, and acceleration along a reference path.</p><div class="signal-illustration" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div><span class="mono-label">x = [ s, v, a ]</span></article><article><span class="step-number">02 <i>↗</i></span><h3>Infer the intent.</h3><p>Estimate an acceleration envelope and fit two smoothness weights to the observations.</p><div class="weight-illustration" aria-hidden="true"><div><span>w<sub>a</sub></span><i></i><b>Acceleration</b></div><div><span>w<sub>j</sub></span><i></i><b>Jerk</b></div></div><span class="mono-label">OBSERVATIONS → DRIVING PREFERENCES</span></article><article><span class="step-number">03 <i>↗</i></span><h3>Predict the trajectory.</h3><p>Trade progress against smoothness, while respecting speed and acceleration constraints.</p><div class="formula">min <span>−s<sub>N</sub></span> + ∑ (w<sub>a</sub>a² + w<sub>j</sub>j²)</div><span class="mono-label">PREFERENCES → FUTURE MOTION</span></article></div>
-      <div class="insight-grid"><article class="envelope-panel"><div class="plot-header"><div><span class="eyebrow">LEARNING THE LIMITS</span><h3>The acceleration envelope</h3></div><span class="unit">m/s²</span></div><svg id="envelope-chart" viewBox="0 0 560 350" role="img" aria-label="Lateral versus longitudinal acceleration samples, true polygon, and estimated eight-face acceleration envelope"></svg><div class="chart-key"><span><i class="orange"></i>Estimated</span><span><i class="mint"></i>True envelope</span><span><i class="muted-dot"></i>Calibration samples</span></div><p class="chart-note">600 idealized calibration samples, including six injected outliers. A robust hinge loss estimates the eight boundaries.</p></article><article class="learning-panel"><div class="plot-header"><div><span class="eyebrow">LEARNING THE PREFERENCES</span><h3>Two weights. A different drive.</h3></div></div><div id="weight-comparison" class="weight-comparison"></div><p class="chart-note">True and fitted parameters for the selected driver. Lower penalties allow more aggressive acceleration and jerk.</p><div class="convergence-label"><span class="eyebrow">BEST FIT LOSS</span><strong id="fit-reduction">—</strong></div><svg id="fit-chart" viewBox="0 0 560 170" role="img" aria-label="Best observed fitting loss over objective evaluations"></svg><p class="chart-note">Fit on three independent noisy training windows. Replay futures are held out.</p></article></div>
+    <section id="method" class="section section-tint"><div class="wrap">
+      <div class="section-heading"><h2>Research method</h2><p>The ECC 2022 paper models an opponent as an optimizer: it seeks progress while balancing motion smoothness and acceleration limits. The inverse problem estimates the optimizer’s parameters from observed motion.</p></div>
+      <div class="method-flow"><article><span class="step-number">01</span><h3>Observe vehicle motion</h3><p>Represent the car by progress along a path, speed, and longitudinal acceleration. Jerk is the control input.</p><p class="equation">x = [s, v, a], &nbsp; u = jerk</p></article><article><span class="step-number">02</span><h3>Estimate limits and preferences</h3><p>Fit an acceleration envelope, then learn two cost weights that explain the measured trajectories.</p><p class="equation">w<sub>a</sub>: acceleration &nbsp; w<sub>j</sub>: jerk</p></article><article><span class="step-number">03</span><h3>Solve for future motion</h3><p>Optimize progress and smoothness subject to dynamics, speed bounds, and acceleration constraints.</p><p class="equation">min −s<sub>N</sub> + ∑ (w<sub>a</sub>a² + w<sub>j</sub>u²)</p></article></div>
+      <div class="method-note"><strong>Implementation scope.</strong> This recreation uses SciPy and nested parameter fitting. The original paper uses a KKT-based inverse formulation and an embedded prediction stack. <a href="https://arxiv.org/abs/2204.01494" target="_blank" rel="noopener">Read the original method ↗</a></div>
+      <div class="insight-grid"><article class="plot-card"><h3>Estimated acceleration limits</h3><p>Lateral and longitudinal acceleration samples with the true and estimated eight-sided envelopes.</p><svg id="envelope-chart" viewBox="0 0 560 350" role="img" aria-label="Calibration acceleration samples and true and estimated acceleration envelopes"></svg><div class="chart-key"><span><i class="predicted"></i>Estimated envelope</span><span><i class="actual"></i>True envelope</span><span><i class="constant"></i>Samples</span></div><p class="chart-note">600 idealized calibration samples include noise and six injected outliers. The nominal axis limits are provided as a prior.</p></article><article class="plot-card"><h3>Estimated driving preferences</h3><p>True and fitted cost weights for the selected driver. Lower weights penalize acceleration and jerk less.</p><div id="weight-comparison" class="weight-comparison"></div><div class="chart-key"><span><i class="actual"></i>True weight</span><span><i class="predicted"></i>Fitted weight</span></div><div class="convergence-label"><h3>Parameter fitting error</h3><span id="fit-reduction">—</span></div><svg id="fit-chart" viewBox="0 0 560 220" role="img" aria-label="Best fitting loss during parameter estimation, on a logarithmic vertical scale"></svg><p class="chart-note">Fitted to three separate noisy training windows. The replayed future motion is held out from fitting.</p></article></div>
     </div></section>
 
     <section id="results" class="section wrap">
-      <div class="section-heading"><div><div class="eyebrow">03 <span class="eyebrow-divider">/</span> THE CAR EXPERIMENT</div><h2>Measured, not imagined.</h2></div><p>Three driving styles on a synthetic closed circuit.<br class="desktop-break"> Every number below comes from the runnable<br class="desktop-break"> Python experiment included in this recreation.</p></div>
-      <div class="result-numbers"><div><span>LEARNED PREDICTOR · MEAN ADE</span><strong id="overall-ade">—<small>m</small></strong><p>Across held-out receding-horizon forecasts</p></div><div><span>VS. CONSTANT VELOCITY</span><strong id="improvement">—<small>%</small></strong><p id="improvement-caption">Reduction in average position error</p></div><div><span>FORECASTS EVALUATED</span><strong id="forecast-count">—<small>× 6 s</small></strong><p>Overlapping windows · 3 simulated drivers</p></div></div>
-      <div class="results-table-wrap"><table class="results-table"><caption>Mean position error by driver (ADE, meters; lower is better)</caption><thead><tr><th scope="col">Prediction model</th><th scope="col">Smooth</th><th scope="col">Balanced</th><th scope="col">Attack</th><th scope="col">Overall ↓</th></tr></thead><tbody id="benchmark-body"></tbody></table></div>
-      <div class="result-footnotes"><p><span class="tiny-dot orange"></span> The constant-velocity baseline follows the same curved reference path. All methods use the same observed initial state.</p><p>These are controlled synthetic tests, not a replication of the paper’s Roborace benchmark. Training and evaluation share the same dynamics family. Forecast windows overlap; they are not independent trials.</p></div>
-      <a class="text-link" href="data/experiment.json" download>Download the complete experiment <span>↓</span></a>
+      <div class="section-heading"><h2>Synthetic race-car evaluation</h2><p>Three driving styles, a closed reference circuit, and six-second forecasts. These results come from this repository’s runnable car example; they are not the paper’s original experimental results.</p></div>
+      <div class="result-numbers"><div><span>Learned predictor: mean position error</span><strong id="overall-ade">—</strong><p>Average displacement error (ADE)</p></div><div><span>Compared with constant velocity</span><strong id="improvement">—</strong><p id="improvement-caption">Reduction in mean position error</p></div><div><span>Forecasts evaluated</span><strong id="forecast-count">—</strong><p>Overlapping windows across three drivers</p></div></div>
+      <div class="results-table-wrap"><table class="results-table"><caption>Mean position error (ADE) in meters. Lower is better.</caption><thead><tr><th scope="col">Prediction method</th><th scope="col">Smooth</th><th scope="col">Balanced</th><th scope="col">Aggressive</th><th scope="col">Overall</th></tr></thead><tbody id="benchmark-body"></tbody></table></div>
+      <div class="result-footnotes"><p>ADE averages the Euclidean position error at the 30 future states. All predictors start from the same observed state. The constant-velocity baseline follows the same curved path.</p><p>The benchmark evaluates forecasts every second. The visual comparison uses nonoverlapping six-second windows for readability. Training and evaluation share the dynamics family and track; the overlapping benchmark windows are correlated.</p><p>Learning improves the overall average in this run. Default weights perform better for the balanced driver: fitting observations does not guarantee the best future prediction when the car keeps replanning.</p></div>
+      <a class="text-link" href="data/experiment.json" download>Download trajectories, metrics, and provenance ↓</a>
     </section>
 
-    <section id="reproduce" class="reproduce-section section"><div class="wrap">
-      <div class="reproduce-top"><div><div class="eyebrow">04 <span class="eyebrow-divider">/</span> MAKE IT YOURS</div><h2>From a paper<br>to a working experiment.</h2><p>Small enough to understand. Open enough to change.<br>Run the simulation, inspect the solver, and regenerate<br class="desktop-break"> every trajectory on this page.</p><a class="button primary" href="assets/inverse-racing-source.zip" download>Download source <span>↓</span></a></div><div class="terminal"><div class="terminal-bar"><div><i></i><i></i><i></i></div><span>TERMINAL</span><button id="copy-install" aria-label="Copy installation commands">Copy <span>⧉</span></button></div><pre><code id="install-code"><span class="comment"># Unzip the source package, then:</span>
-cd inverse-racing
+    <section id="reproduce" class="section section-tint"><div class="wrap">
+      <div class="reproduce-top"><div><h2>Reproduce the experiment</h2><p>Run the optimizer, fit driver preferences, and regenerate the data used by every visualization on this page.</p><div class="hero-actions"><a class="button primary" href="https://github.com/RudolfReiter/inverse-racing" target="_blank" rel="noopener">View repository ↗</a><a class="button secondary" href="assets/inverse-racing-source.zip" download>Download source ↓</a></div></div><div class="terminal"><div class="terminal-bar"><span>Python ≥ 3.9 · NumPy and SciPy</span><button id="copy-install" class="text-link" aria-label="Copy installation commands">Copy commands</button></div><pre><code id="install-code">cd inverse-racing
 python -m venv .venv
 source .venv/bin/activate
 pip install -e '.[dev]'
 
-<span class="comment"># Run the car experiment and numerical tests</span>
+# Generate the car experiment and run tests
 inverse-racing
 pytest -q
 
-<span class="comment"># Explore the regenerated driving scenes</span>
-python -m http.server 8000 --directory docs</code></pre><div class="terminal-footer"><span class="tiny-dot mint"></span> PYTHON ≥ 3.9 <span>NUMPY + SCIPY</span></div></div></div>
-      <div class="recreation-notice"><span class="notice-icon">↻</span><div><h3>A recreation, in the open.</h3><p>This is a recreated implementation, <strong>not the original repository</strong>. It uses a synthetic reference circuit, SciPy solvers, nested weight fitting, and a shared constraint slack when needed. The paper’s original data, KKT-based inverse solver, acados integration, and hardware evaluation are not included. Numerical equivalence to the published results is not claimed.</p></div><a href="https://arxiv.org/abs/2204.01494" target="_blank" rel="noopener" aria-label="See the original paper">↗</a></div>
-      <div class="citation"><div><span class="eyebrow">BUILDING ON THIS WORK?</span><h3>Cite the original research.</h3></div><button id="copy-citation" class="button secondary">Copy BibTeX <span>⧉</span></button></div>
+# Open http://localhost:8000
+python -m http.server 8000 --directory docs</code></pre></div></div>
+      <div class="recreation-notice"><h3>Recreation and limitations</h3><p>This is a recreated implementation, <strong>not the original repository</strong>. The original data, KKT-based inverse solver, acados integration, and hardware evaluation are not included. Numerical equivalence to the published results is not claimed.</p></div>
+      <div class="citation"><div><h3>Cite the original ECC 2022 paper</h3><p>Reiter, Messerer, Schratter, Watzenig, and Diehl.<br><a href="https://doi.org/10.23919/ECC55457.2022.9838100" target="_blank" rel="noopener">DOI: 10.23919/ECC55457.2022.9838100</a></p></div><button id="copy-citation" class="button secondary">Copy BibTeX</button></div>
     </div></section>
   </main>
-  <footer class="footer wrap"><a class="wordmark" href="#"><span class="brand-icon"><i></i><i></i><i></i></span> INVERSE<span class="brand-light">RACING</span></a><span>Recreated with curiosity. Built to be explored.</span><div><a href="https://github.com/RudolfReiter" target="_blank" rel="noopener">GitHub ↗</a><a href="https://arxiv.org/abs/2204.01494" target="_blank" rel="noopener">Paper ↗</a><a href="#">Back to top ↑</a></div></footer>
+  <footer class="footer wrap"><span>Inverse Racing · Recreated implementation</span><div><a href="https://github.com/RudolfReiter/inverse-racing" target="_blank" rel="noopener">Source code ↗</a><a href="https://arxiv.org/abs/2204.01494" target="_blank" rel="noopener">ECC 2022 paper ↗</a></div></footer>
   <div id="toast" role="status" aria-live="polite"></div>
-  <noscript><p class="noscript">JavaScript is required for the interactive driving scenes. You can still read the method, download the source, and inspect <a href="data/summary.json">the numerical results</a>.</p></noscript>
+  <noscript><p class="noscript">JavaScript is required for the car comparison. <a href="data/summary.json">Read the numerical results</a> or download the source to explore the experiment.</p></noscript>
 </body>
 </html>
